@@ -1,6 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axiosInstance from "../api/api";
 
 const ProductDetails = () => {
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const { id } = useParams();
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await axiosInstance.get(`products/${id}`);
+        setProduct(res.data);
+      } catch (err) {
+        setError("Error fetching product details");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  if (loading) <h1>Loading..</h1>;
+  if (error) <h1>{error}</h1>;
+  console.log(product);
   return (
     <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
       {/*- more free and premium Tailwind CSS components at https://tailwinduikit.com/ -*/}
@@ -8,7 +33,7 @@ const ProductDetails = () => {
         <img
           className="w-full"
           alt="image of a girl posing"
-          src="https://i.ibb.co/QMdWfzX/component-image-one.png"
+          src={`http://localhost:8000/${product?.productImage}`}
         />
         <img
           className="mt-6 w-full"
@@ -51,7 +76,7 @@ const ProductDetails = () => {
             Balenciaga Fall Collection
           </p>
           <h1 className="lg:text-2xl text-xl font-semibold lg:leading-6 leading-7 text-gray-800 dark:text-white mt-2">
-            Balenciaga Signature Sweatshirt
+            {product?.productTitle}
           </h1>
         </div>
         <div className="py-4 border-b border-gray-200 flex items-center justify-between">

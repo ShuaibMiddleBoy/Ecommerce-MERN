@@ -9,7 +9,7 @@ import React from "react";
 
 const MainSlider = () => {
   return (
-    <div className="mainSlider">
+    <div className="mainSlider w-[75%] h-[470px]">
       <Swiper
         modules={[Autoplay, EffectFade]}
         slidesPerView={1}
@@ -17,13 +17,25 @@ const MainSlider = () => {
         effect="fade"
       >
         <SwiperSlide>
-          <img src={img1} alt="" />
+          <img
+            src={img1}
+            alt=""
+            className="w-[100%] p-[20px] h-[470px] rounded-[25px]"
+          />
         </SwiperSlide>
         <SwiperSlide>
-          <img src={img2} alt="" />
+          <img
+            src={img2}
+            alt=""
+            className="w-[100%] p-[20px] h-[470px] rounded-[25px]"
+          />
         </SwiperSlide>
         <SwiperSlide>
-          <img src={img3} alt="" />
+          <img
+            src={img3}
+            alt=""
+            className="w-[100%] p-[20px] h-[470px] rounded-[25px]"
+          />
         </SwiperSlide>
       </Swiper>
     </div>

@@ -4,7 +4,7 @@ const TopHeader = lazy(() => import("./TopHeader"));
 const Header = () => {
   return (
     <>
-      <div className="header">
+      <div className="header flex flex-col bg-white border-b-[1px] border-[#ddd]">
         <TopHeader />
         <BottomHeader />
       </div>

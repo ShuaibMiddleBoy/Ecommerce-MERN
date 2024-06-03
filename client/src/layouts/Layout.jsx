@@ -5,7 +5,7 @@ import Footer from "../componets/Footer";
 
 const Layout = () => {
   return (
-    <div className="layout">
+    <div className="layout flex flex-col min-h-[100vh]">
       <Header />
       <main>
         <Outlet />

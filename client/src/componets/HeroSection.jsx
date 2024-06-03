@@ -4,7 +4,7 @@ import ProductCatMenu from "./ProductCatMenu";
 
 const HeroSection = () => {
   return (
-    <div className="heroSection">
+    <div className="heroSection relative flex justify-between width-[100%] h-[470px]">
       <ProductCatMenu />
       <MainSlider />
     </div>

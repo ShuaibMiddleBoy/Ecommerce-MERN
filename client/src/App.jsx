@@ -1,6 +1,9 @@
 import React, { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import AddProduct from "./componets/AddProduct";
+import ProductDetails from "./pages/ProductDetails";
+import PaymentSuccess from "./pages/PaymentSuccess";
 const Home = lazy(() => import("./pages/Home"));
 const Cart = lazy(() => import("./pages/Cart"));
 const Checkout = lazy(() => import("./pages/Checkout"));
@@ -17,12 +20,15 @@ const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/cart", element: <Cart /> },
       { path: "/checkout", element: <Checkout /> },
+      { path: "/add_product", element: <AddProduct /> },
+      { path: "/product/:id", element: <ProductDetails /> },
       { path: "/contact", element: <ContactUs /> },
       { path: "/login", element: <Login /> },
       { path: "/signup", element: <Signup /> },
       { path: "*", element: <ErrorPage /> },
     ],
   },
+  { path: "/success", element: <PaymentSuccess /> },
 ]);
 
 const App = () => {

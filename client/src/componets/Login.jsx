@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -13,7 +13,27 @@ const Login = () => {
   const { errors } = formState;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [googleUserData, SetGoogleUserData] = useState(null);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  async function SigninWithGoogle() {
+    window.open("http://localhost:8000/auth/google/callback");
+  }
+  useEffect(() => {
+    const getGoogleUser = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/auth/login/success", {
+          credentials: "include",
+        });
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await res.json();
+        SetGoogleUserData(data.user);
+      } catch (error) {}
+    };
+    getGoogleUser();
+  }, []);
 
   const onSubmit = async (data) => {
     try {
@@ -34,7 +54,7 @@ const Login = () => {
       toast.error(error.response.data.message);
     }
   };
-  return isAuthenticated ? (
+  return isAuthenticated || !!googleUserData ? (
     <Navigate to="/" />
   ) : (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -45,7 +65,7 @@ const Login = () => {
               Sign in to your account
             </h1>
             <form
-              className="space-y-4 md:space-y-6"
+              className="space-y-2 md:space-y-2"
               onSubmit={handleSubmit(onSubmit)}
             >
               <div>
@@ -88,7 +108,7 @@ const Login = () => {
                   {errors.password?.message}
                 </span>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex py-3 items-center justify-between">
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
@@ -98,7 +118,7 @@ const Login = () => {
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                     />
                   </div>
-                  <div className="ml-3 text-sm">
+                  <div className="ml-3 text-sm ">
                     <label
                       htmlFor="remember"
                       className="text-gray-500 dark:text-gray-300"
@@ -120,8 +140,30 @@ const Login = () => {
               >
                 Sign in
               </button>
+              <button
+                type="button"
+                onClick={() => SigninWithGoogle()}
+                class="text-white w-[100%] bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:ring-[#4285F4]/55 mr-2 mb-2 "
+              >
+                <svg
+                  class="mr-2 -ml-1 w-4 h-4"
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="fab"
+                  data-icon="google"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 488 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
+                  ></path>
+                </svg>
+                Sign in with Google
+              </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Don’t have an account yet?{" "}
+                Don’t have an account yet?
                 <Link
                   to="/signup"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"

@@ -1,7 +1,14 @@
 import React from "react";
 import Tooltip from "./Tooltip";
+import { useDispatch } from "react-redux";
+import {
+  removeFromCart,
+  increamentCartItems,
+  decreamentCartItems,
+} from "../store/cartSlice.js";
 
-const CartItems = () => {
+const CartItems = ({ cart }) => {
+  const dispatch = useDispatch();
   return (
     <div className="rounded-3xl border-2 bg--900 border-gray-200 p-4 lg:p-8 grid grid-cols-12 mb-8 max-lg:max-w-lg max-lg:mx-auto gap-y-4 bg-[#fff]">
       <div className="col-span-12 lg:col-span-2 img box">
@@ -14,10 +21,13 @@ const CartItems = () => {
       <div className="col-span-12 lg:col-span-10 detail w-full lg:pl-3">
         <div className="flex items-center justify-between w-full mb-4">
           <h5 className="font-manrope font-bold text-2xl leading-9 text-gray-900">
-            Round white portable speaker
+            {cart.title}
           </h5>
           <Tooltip content="Delete from cart">
-            <button className="rounded-full group flex items-center justify-center focus-within:outline-red-500">
+            <button
+              onClick={() => dispatch(removeFromCart(cart.id))}
+              className="rounded-full group flex items-center justify-center focus-within:outline-red-500"
+            >
               <svg
                 width={34}
                 height={34}
@@ -53,7 +63,10 @@ const CartItems = () => {
         </p>
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <button className="group rounded-[50px] border border-gray-200 shadow-sm shadow-transparent p-2.5 flex items-center justify-center bg-white transition-all duration-500 hover:shadow-gray-200 hover:bg-gray-50 hover:border-gray-300 focus-within:outline-gray-300">
+            <button
+              onClick={() => dispatch(decreamentCartItems(cart.id))}
+              className="group rounded-[50px] border border-gray-200 shadow-sm shadow-transparent p-2.5 flex items-center justify-center bg-white transition-all duration-500 hover:shadow-gray-200 hover:bg-gray-50 hover:border-gray-300 focus-within:outline-gray-300"
+            >
               <svg
                 className="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
                 width={18}
@@ -76,8 +89,13 @@ const CartItems = () => {
               id="number"
               className="border border-gray-200 rounded-full w-10 aspect-square outline-none text-gray-900 font-semibold text-sm py-1.5 px-3 bg-gray-100  text-center"
               placeholder={2}
+              value={cart.quantity}
+              disabled
             />
-            <button className="group rounded-[50px] border border-gray-200 shadow-sm shadow-transparent p-2.5 flex items-center justify-center bg-white transition-all duration-500 hover:shadow-gray-200 hover:bg-gray-50 hover:border-gray-300 focus-within:outline-gray-300">
+            <button
+              onClick={() => dispatch(increamentCartItems(cart.id))}
+              className="group rounded-[50px] border border-gray-200 shadow-sm shadow-transparent p-2.5 flex items-center justify-center bg-white transition-all duration-500 hover:shadow-gray-200 hover:bg-gray-50 hover:border-gray-300 focus-within:outline-gray-300"
+            >
               <svg
                 className="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
                 width={18}
@@ -97,7 +115,7 @@ const CartItems = () => {
             </button>
           </div>
           <h6 className="text-indigo-600 font-manrope font-bold text-2xl leading-9 text-right">
-            $220
+            RS {cart.totalPrice}
           </h6>
         </div>
       </div>

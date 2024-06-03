@@ -1,32 +1,54 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/cartSlice";
 
-const Product = () => {
+const Product = ({ product }) => {
+  const splitProductTitle =
+    product.productTitle.length > 20
+      ? product.productTitle.slice(0, 20) + "..."
+      : product.productTitle;
+
+  const dispatch = useDispatch();
+  const handleCartToggle = () => {
+    dispatch(
+      addToCart({
+        id: product._id,
+        title: product.productTitle,
+        price: product.productPrice,
+        image: product.productImage,
+      })
+    );
+  };
   return (
-    <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md product">
-      <a
-        className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
-        href="#"
+    <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md p-[5px]">
+      <Link
+        className="relative mx-3 mt-3 h-[260px] w-[260px] overflow-hidden rounded-xl"
+        to={`product/${product._id}`}
       >
         <img
           className="object-cover"
-          src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+          src={`http://localhost:8000/${product.productImage}`}
           alt="product image"
         />
         <span className="absolute top-0 left-0 m-2 rounded-full bg-[#ff5733] px-2 text-center text-sm font-medium text-white">
           39% OFF
         </span>
-      </a>
+      </Link>
       <div className="mt-4 px-5 pb-5">
-        <a href="#">
+        <Link to={`product/${product._id}`}>
           <h5 className="text-xl tracking-tight text-slate-900">
-            Nike Air MX Super 2500 - Red
+            {splitProductTitle}
           </h5>
-        </a>
+        </Link>
         <div className="mt-2 mb-5 flex items-center justify-between">
           <p>
-            <span className="text-3xl font-bold text-slate-900">$449</span>
-            <span className="text-sm text-slate-900 line-through">$699</span>
+            <span className="text-sm font-bold text-slate-900">
+              {product.productPrice}RS
+            </span>
+            <span className="text-sm text-slate-900 line-through">
+              {product.productPrice}RS
+            </span>
           </p>
           <div className="flex items-center">
             <svg
@@ -80,6 +102,7 @@ const Product = () => {
           </div>
         </div>
         <Link
+          onClick={handleCartToggle}
           to="/"
           className="flex items-center justify-center rounded-md px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#fc4a22] focus:outline-none focus:ring-4 focus:ring-blue-300 bg-[#ff5733] "
         >

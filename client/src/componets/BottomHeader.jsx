@@ -7,13 +7,15 @@ const BottomHeader = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="bottomHeader">
+    <div className="bottomHeader flex justify-between items-center p-[0px_60px_10px_20px]">
       <div className="left">
-        <ul>
+        <ul className="flex gap-[30px] text-[#222]">
           <li>
             <Link
               to={"/featured_selections"}
-              className={`${isActive("/featured_selections") ? "active" : ""}`}
+              className={`${
+                isActive("/featured_selections") ? "active" : ""
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
             >
               Featured selections
             </Link>
@@ -21,7 +23,9 @@ const BottomHeader = () => {
           <li>
             <Link
               to={"/trade_assurance"}
-              className={`${isActive("/trade_assurance") ? "active" : ""}`}
+              className={`${
+                isActive("/trade_assurance") ? "active" : ""
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
             >
               Trade Assurance
             </Link>
@@ -29,7 +33,9 @@ const BottomHeader = () => {
           <li>
             <Link
               to={"/help_center"}
-              className={`${isActive("/help_center") ? "active" : ""}`}
+              className={`${
+                isActive("/help_center") ? "active" : ""
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
             >
               Help Center
             </Link>
@@ -37,7 +43,9 @@ const BottomHeader = () => {
           <li>
             <Link
               to={"/become_a_supplier"}
-              className={`${isActive("/become_a_supplier") ? "active" : ""}`}
+              className={`${
+                isActive("/become_a_supplier") ? "active" : ""
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
             >
               Become a Supplier
             </Link>
@@ -45,16 +53,23 @@ const BottomHeader = () => {
         </ul>
       </div>
       <div className="right">
-        <ul>
+        <ul className="flex gap-[30px] text-[#222]">
           <li disabled>
-            <Link to={"/"} className={`${isActive("/") ? "active" : ""}`}>
+            <Link
+              to={"/"}
+              className={`${
+                isActive("/") ? "active" : ""
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
+            >
               Home
             </Link>
           </li>
           <li>
             <Link
               to={"/products"}
-              className={`${isActive("/products") ? "active" : ""}`}
+              className={`${
+                isActive("/products") ? "active" : ""
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
             >
               Products
             </Link>
@@ -62,7 +77,9 @@ const BottomHeader = () => {
           <li>
             <Link
               to={"/about"}
-              className={`${isActive("/about") ? "active" : ""}`}
+              className={`${
+                isActive("/about") ? "active" : ""
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
             >
               About Us
             </Link>
@@ -70,7 +87,9 @@ const BottomHeader = () => {
           <li>
             <Link
               to={"/contact"}
-              className={`${isActive("/contact") ? "active" : ""}`}
+              className={`${
+                isActive("/contact") ? "active" : ""
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22] `}
             >
               Contact US
             </Link>
