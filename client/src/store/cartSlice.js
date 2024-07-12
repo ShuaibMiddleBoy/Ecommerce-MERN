@@ -13,14 +13,15 @@ const cartSlice = createSlice({
       const cartItem = state.findIndex(
         (itemIndex) => itemIndex.id === action.payload.id
       );
+      const quantity = action.payload.quantity || 1;
       if (cartItem !== -1) {
-        state[cartItem].quantity++;
+        state[cartItem].quantity += quantity;
         state[cartItem].totalPrice += action.payload.price;
         updateLocalStorage(state);
       } else {
         state.push({
           ...action.payload,
-          quantity: 1,
+          quantity,
           totalPrice: action.payload.price,
         });
         updateLocalStorage(state);

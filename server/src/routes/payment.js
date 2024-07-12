@@ -1,7 +1,7 @@
-import express from "express";
-import { payment } from "../controllers/payment.js";
-const router = express.Router();
+    import express from "express";
+    import { payment, singlePayment } from "../controllers/payment.js";
+    const router = express.Router();
 
-router.post("/create-checkout-session", payment);
-
-export default router;
+    router.post("/create-checkout-session", payment);
+    router.post("/create-checkout-session-single-product", singlePayment)
+    export default router;

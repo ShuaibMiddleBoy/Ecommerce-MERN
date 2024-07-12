@@ -12,7 +12,7 @@ function navigate(url) {
 const Footer = () => {
   return (
     <div className="footer mt-auto bg-white border-t-[1px] border-[#ddd]">
-      <div className="footerContent grid grid-cols-3 p-[20px]">
+      <div className="footerContent grid-cols-1 gap-[20px] sm:grid-cols-2 grid md:grid-cols-3 p-[20px]">
         <div className="first p-[20px 40px]">
           <img src={logo} alt="logo" className="w-[100px] text-[#54595f]" />
           <p>

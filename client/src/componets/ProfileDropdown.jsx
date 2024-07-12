@@ -23,9 +23,9 @@ const ProfileDropdown = ({ setProfileDropdown, isGoogleUser }) => {
         onClick={() => setProfileDropdown(false)}
       ></div>
 
-      <div className="profileDropwdown absolute top-[30px] right-[0px] flex flex-col gap-[7px] bg-white shadow-custom w-[150px] p-[10px_0px] rounded-sm">
-        <Link>
-          <div className="profileContent flex items-center pl-[10px] gap-2">
+      <div className="profileDropwdown z-10 absolute top-[30px] right-[0px] flex flex-col gap-[7px] bg-white shadow-custom w-[150px] p-[10px_0px] rounded-sm">
+        <Link to={'user_profile'}>
+          <div className="profileContent flex items-center pl-[10px] gap-2">         
             <CgProfile className="profileIcon" />
             <span>User Profile</span>
           </div>

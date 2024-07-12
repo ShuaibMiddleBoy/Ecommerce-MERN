@@ -1,16 +1,21 @@
 import Product from "../models/product.js";
+import Category from "../models/category.js"
 
 // controller for post/create a product
 export const addProduct = async (req, res) => {
-  const { productTitle, productPrice, productDesc } = req.body;
+  const { productTitle, productPrice, productDesc, productCategory } = req.body;
   const productImage = req.file?.filename;
 
   try {
-    if (!productTitle || !productPrice || !productImage || !productDesc) {
+    if (!productTitle || !productPrice || !productImage || !productDesc || !productCategory) {
       return res.status(400).json({
-        error:
-          "All fields (productTitle, productPrice, productImage, productDesc) are required.",
+        error: "All fields (productTitle, productPrice, productImage, productDesc, productCategory) are required.",
       });
+    }
+
+    const category = await Category.findById(productCategory);
+    if (!category) {
+      return res.status(400).json({ error: "Invalid category" });
     }
 
     const product = new Product({
@@ -18,6 +23,7 @@ export const addProduct = async (req, res) => {
       productPrice,
       productImage,
       productDesc,
+      productCategory,
     });
 
     const savedProduct = await product.save();
@@ -74,5 +80,18 @@ export const searchProduct = async (req, res) => {
     res.status(200).json(searchedProd);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+// controller for fetching products by category
+export const getProductsByCategory = async (req, res) => {
+  const { categoryId } = req.params;
+
+  try {
+    const products = await Product.find({ productCategory: categoryId });
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -1,0 +1,25 @@
+.skeleton{
+    background-color: rgb(189, 182, 182);
+    display: inline-block;
+    width: 100%;
+    border-radius: 5px;
+    background-image: linear-gradient(90deg, #ddd 0px ,  #e8e8e8 40px, #ddd 80px);
+    background-size: 1000px 1000px;
+    animation: skeletonAni 4s linear infinite forwards;
+}
+
+@keyframes skeletonAni {
+    from{
+        background-position:-200px 0px;
+    }
+    to{
+        background-position: 500px 0px;
+    }
+}
+
+
+.skeleton.circle{
+    border-radius: 50%;
+}
+
+

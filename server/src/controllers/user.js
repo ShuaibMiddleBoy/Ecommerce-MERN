@@ -5,9 +5,9 @@ import jwt from "jsonwebtoken";
 // Controller for Registeration
 export const registerController = async (req, res) => {
   try {
-    const { userName, email, password, confirmPassword } = req.body;
+    const { displayName, email, password, confirmPassword } = req.body;
 
-    if (!userName) {
+    if (!displayName) {
       return res
         .status(400)
         .json({ success: false, message: "User name is requried" });
@@ -50,7 +50,7 @@ export const registerController = async (req, res) => {
     const hashedPassword = await hashPassword(password);
 
     const user = new userModel({
-      userName,
+      displayName,
       email,
       password: hashedPassword,
     });
@@ -75,7 +75,7 @@ export const registerController = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "User registered successfully",
-      user: { id: result._id, userName: result.userName, email: result.email },
+      user: { id: result._id, displayName: result.displayName, email: result.email, role: result.role },
       auth: token,
     });
   } catch (error) {
@@ -136,7 +136,7 @@ export const loginController = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Login successful",
-      user: { id: user._id, userName: user.userName, email: user.email },
+      user: { id: user._id, displayName: user.displayName, email: user.email, role:user.role },
       auth: token,
     });
   } catch (error) {
@@ -147,3 +147,14 @@ export const loginController = async (req, res) => {
     });
   }
 };
+
+export const getAllUsers = async (req, res) => {
+try {
+  const users =  await userModel.find();
+res.status(200).json(users)
+
+} catch (error) {
+  res.status(500).json({message:"Server error. Could not fetch users."})
+}
+
+}

@@ -1,11 +1,14 @@
-import React from "react";
+
 import { Outlet } from "react-router-dom";
 import Header from "../componets/Header";
 import Footer from "../componets/Footer";
 
 const Layout = () => {
+
+
   return (
     <div className="layout flex flex-col min-h-[100vh]">
+
       <Header />
       <main>
         <Outlet />
@@ -15,4 +18,4 @@ const Layout = () => {
   );
 };
 
-export default React.memo(Layout);
+export default Layout;

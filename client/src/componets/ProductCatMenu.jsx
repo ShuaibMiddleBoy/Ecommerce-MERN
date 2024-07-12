@@ -1,12 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axiosInstance from "../api/api";
 
 const ProductCatMenu = () => {
-  const [categories, setCategories] = useState([
-    { name: "Electronics", showSubCat: false },
-    { name: "Clothes", showSubCat: false },
-    { name: "Beauty & Cosmetics", showSubCat: false },
-  ]);
+  const [categories, setCategories] = useState();
+  const [products, setProducts] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axiosInstance.get("/categories/");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+
+    fetchCategories();
+  }, []);
+
+
+  const fetchProductsByCategory = async (categoryId) => {
+    try {
+      const response = await axiosInstance.get(`/products/category/${categoryId}`);
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  }
+
 
   const handleMouseEnter = (index) => {
     const updatedCategories = [...categories];
@@ -20,59 +44,29 @@ const ProductCatMenu = () => {
     setCategories(updatedCategories);
   };
 
-  return (
-    <div className="productCatMenu w-[25%] m-[20px] rounded-md bg-white">
-      <h2 className="bg-[#ff5733] text-white rounded-[3px_3px_0_0] p-[10px] tracking-wide font-bold uppercase">
-        Categories
-      </h2>
-      <div className="categories flex flex-col p-[10px] gap-[5px]">
-        {categories.map((category, index) => (
-          <div key={index}>
-            {/* Main Category */}
-            <div
-              className="category inline-block relative text-[#54595f]"
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={() => handleMouseLeave(index)}
-            >
-              <Link className="transition-all duration-1000 ease-in-out hover:color-[#fc4a22]">
-                {category.name}
-              </Link>
-              {/* Sub Categories */}
-              {category.showSubCat && (
-                <ul className="sub-categories bg-white absolute color-[#54595f] left-[40px] z-10 border-solid divide-[#ddd] border-[1px]">
-                  {category.name === "Electronics" && (
-                    <>
-                      <li className="p-[2px_10px] w-[200px]">
-                        <Link>Laptops</Link>
-                      </li>
-                      <li className="p-[2px_10px] w-[200px]">
-                        <Link>Smartphones</Link>
-                      </li>
+  const handleCategoryClick = (category) => {
+setSelectedCategory(category)
+fetchProductsByCategory(category._id);
+  }
 
-                      <li className="p-[2px_10px] w-[200px]">
-                        <Link>Tablets</Link>
-                      </li>
-                    </>
-                  )}
-                  {category.name === "Clothes" && (
-                    <>
-                      <li className="p-[2px_10px] w-[200px]">
-                        <Link>Men's Clothing</Link>
-                      </li>
-                      <li className="p-[2px_10px] w-[200px]">
-                        <Link>Women's Clothing</Link>
-                      </li>
-                      <li className="p-[2px_10px] w-[200px]">
-                        <Link>Kid's Clothing</Link>
-                      </li>
-                    </>
-                  )}
-                </ul>
-              )}
-            </div>
+  return (
+
+    <div className="categories flex flex-col p-[10px] gap-[5px]">
+      {categories?.map((category, index) => (
+        <div key={index}>
+          {/* Main Category */}
+          <div
+            className="category inline-block relative text-[#54595f]"
+            onMouseEnter={() => handleMouseEnter(index)}
+            onMouseLeave={() => handleMouseLeave(index)}
+          >
+             <Link key={category._id} to={`/products/${category._id}`}>
+              {category.name}
+            </Link>
+
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };

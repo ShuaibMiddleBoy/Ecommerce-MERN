@@ -1,15 +1,14 @@
-import React, { Suspense, lazy } from "react";
-const Products = lazy(() => import("../componets/Products"));
-const HeroSection = lazy(() => import("../componets/HeroSection"));
+import React from "react";
+import Products from "../componets/Products";
+import HeroSection from "../componets/HeroSection";
+import HomeProducts from "../componets/HomeProducts";
 
 const Home = () => {
   return (
-    <Suspense fallback={<h2>Loading..</h2>}>
-      <div className="home">
-        <HeroSection />
-        <Products />
-      </div>
-    </Suspense>
+    <div className="home">
+      <HeroSection />
+      <HomeProducts/>
+    </div>
   );
 };
 

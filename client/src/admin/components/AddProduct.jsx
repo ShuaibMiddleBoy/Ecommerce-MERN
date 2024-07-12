@@ -1,19 +1,36 @@
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
-import axiosInstance from "../api/api";
+import axiosInstance from "../../api/api";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect, useState } from "react";
 
 const AddProduct = () => {
   const form = useForm();
   const { register, handleSubmit, formState } = form;
   const { errors } = formState;
+  const [categories, setCategories] = useState([]);
+
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axiosInstance.get("/categories/");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("productTitle", data.productTitle);
     formData.append("productPrice", data.productPrice);
     formData.append("productImage", data.productImage[0]);
     formData.append("productDesc", data.productDesc);
+    formData.append("productCategory", data.productCategory);
     try {
       const res = await axiosInstance.post("/products/add", formData, {
         headers: { "Content-type": "multipart/form-data" },
@@ -45,8 +62,7 @@ const AddProduct = () => {
             {...register("productTitle", {
               required: "Product title is required",
             })}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="name@flowbite.com"
+            className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-black-400 text-black-400"
           />
           <span className="text-[#FF9494] block text-sm h-[25px] w-[100%]">
             {errors.productTitle?.message}
@@ -65,7 +81,7 @@ const AddProduct = () => {
               required: "Product price is required",
             })}
             placeholder="write product price"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-black-400 text-black-400"
           />
           <span className="text-[#FF9494] block text-sm h-[25px] w-[100%]">
             {errors.productPrice?.message}
@@ -84,7 +100,7 @@ const AddProduct = () => {
             {...register("productImage", {
               required: "Product image is required",
             })}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-black-400 text-black-400"
           />
           <span className="text-[#FF9494] block text-sm h-[25px] w-[100%]">
             {errors.productImage?.message}
@@ -103,10 +119,34 @@ const AddProduct = () => {
               required: "Product Description is required",
             })}
             placeholder="write product description"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-black-400 text-black-400"
           />
           <span className="text-[#FF9494] block text-sm h-[25px] w-[100%]">
             {errors.productDesc?.message}
+          </span>
+        </div>
+
+        <div className="mb-5">
+          <label
+            htmlFor="ProductCategory"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Product Category
+          </label>
+          <select
+            {...register("productCategory", {
+              required: "Product category is required",
+            })}
+            className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-black-400 text-black-400 "
+          >
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+          <span className="text-[#FF9494] block text-sm h-[25px] w-[100%]">
+            {errors.productCategory?.message}
           </span>
         </div>
 

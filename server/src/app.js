@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import session from "express-session";
 import passport from "./config/passport.js";
+import categoryRoutes from "./routes/category.js"
 
 mongoDB();
 const PORT = process.env.PORT;
@@ -37,6 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use("/api/auth", user);
 app.use("/api/products", product);
+app.use("/api/categories", categoryRoutes);
 app.use("/api", payment);
 app.use("/auth", GoogleAuth);
 

@@ -5,6 +5,7 @@ import {
   showProduct,
   showProducts,
   searchProduct,
+  getProductsByCategory
 } from "../controllers/product.js";
 
 const router = express.Router();
@@ -24,5 +25,6 @@ router.post("/add", upload.single("productImage"), addProduct);
 router.get("/", showProducts);
 router.get("/:id", showProduct);
 router.get("/search/:key", searchProduct);
+router.get("/category/:categoryId", getProductsByCategory); 
 
 export default router;

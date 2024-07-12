@@ -1,14 +1,14 @@
-import React, { Suspense, lazy, useState, useEffect } from "react";
+import React, {useRef, useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { totalQuantity } from "../store/cartSlice";
-const Search = lazy(() => import("./Search"));
+import Search from "./Search";
 import { Link } from "react-router-dom";
 import { IoCartOutline } from "react-icons/io5";
-import { LuLogIn } from "react-icons/lu";
+
 import {
   FaArrowAltCircleRight,
-  FaRegArrowAltCircleRight,
+
 } from "react-icons/fa";
 
 import UserImg from "../assets/user.png";
@@ -20,6 +20,20 @@ const TopHeader = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const itemsTotalQuantity = useSelector(totalQuantity);
   const [googleUserData, SetGoogleUserData] = useState(null);
+
+  const ProfileDropdownRef = useRef(null);
+
+  useEffect(()=>{
+    function handleClickOutside(event) {
+      if (ProfileDropdownRef.current && !ProfileDropdownRef.current.contains(event.target)) {
+        setProfileDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  },[ProfileDropdownRef])
 
   const profileDropdownToggle = () => setProfileDropdown((prev) => !prev);
 
@@ -47,10 +61,9 @@ const TopHeader = () => {
         </Link>
       </div>
 
-      <div className="header_search relative m-auto">
-        <Suspense fallback={<h2>Loading..</h2>}>
+      <div className="header_search relative m-auto w-[40%]">
+
           <Search />
-        </Suspense>
       </div>
 
       <div className="flex gap-10 items-center">
@@ -69,13 +82,13 @@ const TopHeader = () => {
           </Tooltip>
         </div>
 
-        <div className="header_user relative">
+        <div className="header_user relative" ref={ProfileDropdownRef}>
           {isAuthenticated || googleUserData ? (
             <>
               <Tooltip content="User setting" direction="top">
                 <button onClick={profileDropdownToggle}>
                   <img
-                    src={
+                    srcSet={
                       googleUserData?.image ? googleUserData?.image : UserImg
                     }
                     alt="userImage"

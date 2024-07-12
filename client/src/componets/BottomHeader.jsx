@@ -1,21 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 const BottomHeader = () => {
   const location = useLocation();
+  const [isSticky , setIsSticky] = useState(false);
+
+  useEffect(()=>{
+
+    const handleScroll = () => {
+      if(window.scrollY > 400){
+      setIsSticky(true)
+      }else{
+        setIsSticky(false)
+      }
+    }
+
+
+window.addEventListener('scroll', handleScroll)
+
+return () => {
+  window.removeEventListener("scroll", handleScroll)
+}
+  })
+
+ 
 
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="bottomHeader flex justify-between items-center p-[0px_60px_10px_20px]">
-      <div className="left">
+    <div className={`bottomHeader flex justify-between items-center p-[0px_60px_10px_20px] ${isSticky ? "sticky top-0 bg-white z-50 shadow-md" : ""}`}>
+      <div className="left ">
         <ul className="flex gap-[30px] text-[#222]">
           <li>
             <Link
               to={"/featured_selections"}
               className={`${
                 isActive("/featured_selections") ? "active" : ""
-              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22] pointer-events-none`}
             >
               Featured selections
             </Link>
@@ -25,7 +46,7 @@ const BottomHeader = () => {
               to={"/trade_assurance"}
               className={`${
                 isActive("/trade_assurance") ? "active" : ""
-              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22] pointer-events-none`}
             >
               Trade Assurance
             </Link>
@@ -35,7 +56,7 @@ const BottomHeader = () => {
               to={"/help_center"}
               className={`${
                 isActive("/help_center") ? "active" : ""
-              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22] pointer-events-none`}
             >
               Help Center
             </Link>
@@ -45,7 +66,7 @@ const BottomHeader = () => {
               to={"/become_a_supplier"}
               className={`${
                 isActive("/become_a_supplier") ? "active" : ""
-              } transition-all duration-300 ease-in-out hover:text-[#fc4a22]`}
+              } transition-all duration-300 ease-in-out hover:text-[#fc4a22] pointer-events-none`}
             >
               Become a Supplier
             </Link>

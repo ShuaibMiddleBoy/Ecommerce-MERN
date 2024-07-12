@@ -1,45 +1,54 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useState, useEffect } from "react";
 import axiosInstance from "../api/api";
-const Product = lazy(() => import("./Product"));
-import { toast } from "react-toastify";
+import Product from "./Product";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
-import {
-  selectAllProducts,
-  getSearchStatus,
-  getSearchError,
-} from "../store/searchSlice";
+import { selectAllProducts, getSearchStatus } from "../store/searchSlice";
+import ProductsSkeleton from "./ProductsSkeleton";
+import ReactPaginate from 'react-paginate';
+import { useParams } from "react-router-dom";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [itemOffset, setItemOffset] = useState(0);
+  const itemsPerPage = 8;
+  const { categoryId } = useParams();
+
+  console.log("cat ID", categoryId);
 
   const searchProducts = useSelector(selectAllProducts);
   const searchStatus = useSelector(getSearchStatus);
-  // const searchError = useSelector(getSearchError);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axiosInstance.get("products");
-        setProducts(res.data.data);
+        let res;
+        if (categoryId) {
+          res = await axiosInstance.get(`products/category/${categoryId}`);
+          setProducts(res.data);
+        } else {
+          res = await axiosInstance.get("products");
+          setProducts(res.data.data);
+        }
+        
         setLoading(false);
       } catch (error) {
-        setError(error.message);
-        toast.error("Failed to fetch products");
-        setLoading(false);
+        console.log("Error in products fetching", error);
       }
     };
     fetchProduct();
-  }, []);
-
+  }, [categoryId]);
+console.log('myProducts',products);
   if (loading) {
-    return <h2>Loading..</h2>;
-  }
-
-  if (error) {
-    return <h2>Error: {error}</h2>;
+    return (
+      <div className="products flex flex-wrap justify-center m-auto gap-2 p-[20px] rounded-md">
+        <ProductsSkeleton />
+        <ProductsSkeleton />
+        <ProductsSkeleton />
+        <ProductsSkeleton />
+      </div>
+    );
   }
 
   const displayedProducts =
@@ -47,15 +56,47 @@ const Products = () => {
       ? searchProducts
       : products;
 
+  const noSearchResults =
+    searchStatus === "succeeded" && searchProducts.length === 0;
+
+  // Pagination logic
+  const endOffset = itemOffset + itemsPerPage;
+  const currentItems = displayedProducts.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(displayedProducts.length / itemsPerPage);
+
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % displayedProducts.length;
+    setItemOffset(newOffset);
+  };
+
   return (
-    <Suspense callfack={<h2>Loading..</h2>}>
-      <div className="products grid grid-cols-4 gap-10 p-[20px] rounded-md">
-        {displayedProducts.map((product) => {
-          return <Product key={product._id} product={product} />;
-        })}
+    <>
+      <div className="products flex flex-wrap justify-center gap-2 p-[20px] rounded-md">
+        {noSearchResults ? (
+          <h2>Search Product is not Available 🙂</h2>
+        ) : (
+          currentItems.map((product) => (
+            <Product key={product._id} product={product} />
+          ))
+        )}
       </div>
-    </Suspense>
+      {displayedProducts.length > itemsPerPage && ( <ReactPaginate
+        breakLabel="..."
+        nextLabel="next >"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={5}
+        pageCount={pageCount}
+        previousLabel="< previous"
+        renderOnZeroPageCount={null}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+        pageClassName={"page-item"}
+        previousClassName={"page-item"}
+        nextClassName={"page-item"}
+        breakClassName={"page-item"}
+      />)}
+    </>
   );
 };
 
-export default React.memo(Products);
+export default Products;

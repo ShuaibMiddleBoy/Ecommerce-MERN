@@ -17,7 +17,7 @@ const Login = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   async function SigninWithGoogle() {
-    window.open("http://localhost:8000/auth/google/callback");
+    window.open("http://localhost:8000/auth/google/callback", "_self");
   }
   useEffect(() => {
     const getGoogleUser = async () => {
@@ -57,11 +57,11 @@ const Login = () => {
   return isAuthenticated || !!googleUserData ? (
     <Navigate to="/" />
   ) : (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section className="bg-gray-50 ">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0  ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl  dark:text-gray">
               Sign in to your account
             </h1>
             <form
@@ -71,7 +71,7 @@ const Login = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900  dark:text-gray"
                 >
                   Your email
                 </label>
@@ -81,7 +81,7 @@ const Login = () => {
                     required: "Email is Required",
                   })}
                   id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600   dark:text-gray dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@company.com"
                 />
                 <span className="text-[#FF9494] block text-sm h-[25px] w-[100%]">
@@ -91,7 +91,7 @@ const Login = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900  dark:text-gray"
                 >
                   Password
                 </label>
@@ -102,7 +102,7 @@ const Login = () => {
                   })}
                   id="password"
                   placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className=" border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:text-gray dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 />
                 <span className="text-[#FF9494] block text-sm h-[25px] w-[100%]">
                   {errors.password?.message}
@@ -115,7 +115,7 @@ const Login = () => {
                       id="remember"
                       aria-describedby="remember"
                       type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                     />
                   </div>
                   <div className="ml-3 text-sm ">

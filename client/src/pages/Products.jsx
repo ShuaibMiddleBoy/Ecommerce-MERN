@@ -1,7 +1,10 @@
-import React from "react";
-
+import React, { Suspense, lazy } from "react";
+import Productss from "../componets/Products";
 const Products = () => {
-  return <div className="products">Products</div>;
+  return (
+      <Productss />
+    
+  );
 };
 
 export default Products;

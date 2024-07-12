@@ -24,7 +24,7 @@ const Product = ({ product }) => {
     <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md p-[5px]">
       <Link
         className="relative mx-3 mt-3 h-[260px] w-[260px] overflow-hidden rounded-xl"
-        to={`product/${product._id}`}
+        to={`/product/${product._id}`}
       >
         <img
           className="object-cover"
