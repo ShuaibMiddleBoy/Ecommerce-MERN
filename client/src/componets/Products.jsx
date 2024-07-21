@@ -12,10 +12,10 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [itemOffset, setItemOffset] = useState(0);
-  const itemsPerPage = 8;
+  const itemsPerPage = 6;
   const { categoryId } = useParams();
-
-  console.log("cat ID", categoryId);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("")
 
   const searchProducts = useSelector(selectAllProducts);
   const searchStatus = useSelector(getSearchStatus);
@@ -39,7 +39,6 @@ const Products = () => {
     };
     fetchProduct();
   }, [categoryId]);
-console.log('myProducts',products);
   if (loading) {
     return (
       <div className="products flex flex-wrap justify-center m-auto gap-2 p-[20px] rounded-md">
@@ -69,9 +68,63 @@ console.log('myProducts',products);
     setItemOffset(newOffset);
   };
 
+  const handleFilter = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      let res;
+      if (categoryId) {
+        res = await axiosInstance.get(`products/category/${categoryId}`, {
+          params: {
+            minPrice: minPrice || undefined,
+            maxPrice: maxPrice || undefined,
+          },
+        });
+      } else {
+        res = await axiosInstance.get("products", {
+          params: {
+            minPrice: minPrice || undefined,
+            maxPrice: maxPrice || undefined,
+          },
+        });
+      }
+      setProducts(res.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error in products fetching", error);
+      setLoading(false);
+    }
+  }
+
   return (
-    <>
-      <div className="products flex flex-wrap justify-center gap-2 p-[20px] rounded-md">
+
+    <div className="flex w-[97%] m-auto my-5 gap-5">
+    <div className="filter  w-[300px] h-[500px] bg-white rounded-md flex flex-col gap-2 p-5">
+
+    <input
+          type="number"
+          placeholder="Min Price"
+          value={minPrice}
+          onChange={(e) => setMinPrice(e.target.value)}
+          className="border p-2 rounded"
+        />
+        <input
+          type="number"
+          placeholder="Max Price"
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+          className="border p-2 rounded"
+        />
+
+             <button
+          onClick={handleFilter}
+          className="bg-blue-700 text-white p-2 rounded-sm"
+        >
+          Apply
+        </button>
+    </div>
+      <div className="products grid grid-cols-3 gap-2 mx-auto rounded-md">
         {noSearchResults ? (
           <h2>Search Product is not Available 🙂</h2>
         ) : (
@@ -79,8 +132,7 @@ console.log('myProducts',products);
             <Product key={product._id} product={product} />
           ))
         )}
-      </div>
-      {displayedProducts.length > itemsPerPage && ( <ReactPaginate
+          {displayedProducts.length > itemsPerPage && ( <ReactPaginate
         breakLabel="..."
         nextLabel="next >"
         onPageChange={handlePageClick}
@@ -95,7 +147,9 @@ console.log('myProducts',products);
         nextClassName={"page-item"}
         breakClassName={"page-item"}
       />)}
-    </>
+      </div>
+    </div>
+    
   );
 };
 

@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../store/cartSlice";
 import ProductDetailsSkeleton from "../skeleton/components/ProductDetails";
 import { loadStripe } from "@stripe/stripe-js";
+import UserReview from "../componets/UserReview";
 
 const ProductDetails = () => {
   const [product, setProduct] = useState(null);
@@ -48,6 +49,7 @@ const ProductDetails = () => {
         setLoading(false);
       }
     };
+      
     fetchProduct();
   }, [id]);
 
@@ -78,7 +80,9 @@ const ProductDetails = () => {
     }
   };
 
+
   return (
+    <>
     <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
       <div className="xl:w-2/6 lg:w-2/5 w-80 md:block">
         <img
@@ -138,7 +142,10 @@ const ProductDetails = () => {
         </button>
         <div></div>
       </div>
+
     </div>
+    <UserReview productId={id} productTitle={product.productTitle} />
+    </>
   );
 };
 

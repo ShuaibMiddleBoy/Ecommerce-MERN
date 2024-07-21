@@ -36,8 +36,24 @@ export const addProduct = async (req, res) => {
 
 // Controller to show/get all products
 export const showProducts = async (req, res) => {
+   const {minPrice, maxPrice} = req.query;
+  
+   let query = {};
+
+   if(minPrice){
+    query.productPrice = {$gte : Number(minPrice)}
+   }
+
+
+  if(maxPrice){
+      if(!query.productPrice){
+        query.productPrice = {}
+      }
+      query.productPrice.$lte = Number(maxPrice)
+  }
   try {
-    const products = await Product.find();
+    const products = await Product.find(query)
+
     res.status(200).json({
       success: true,
       data: products,

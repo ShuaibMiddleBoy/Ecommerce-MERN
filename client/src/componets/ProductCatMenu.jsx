@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../api/api";
-
+import Skeleton from "../skeleton/Skeleton";
 const ProductCatMenu = () => {
   const [categories, setCategories] = useState();
   const [products, setProducts] = useState([])
@@ -49,10 +49,32 @@ setSelectedCategory(category)
 fetchProductsByCategory(category._id);
   }
 
+
+  const CatSkeleton = () => {
+
+    return (
+      <div className="categories flex flex-col p-[10px] gap-[5px]">
+      <div className="inline-block relative">
+    <Skeleton width="100%" height="12px"/>
+    <Skeleton width="100%" height="12px"/>
+    <Skeleton width="100%" height="12px"/>
+    <Skeleton width="100%" height="12px"/>
+    <Skeleton width="100%" height="12px"/>
+    <Skeleton width="100%" height="12px"/>
+    <Skeleton width="100%" height="12px"/>
+    </div>
+    </div>
+    )
+
+
+ 
+  }
+
+
   return (
 
     <div className="categories flex flex-col p-[10px] gap-[5px]">
-      {categories?.map((category, index) => (
+      {categories ?    categories?.map((category, index) => (
         <div key={index}>
           {/* Main Category */}
           <div
@@ -66,7 +88,8 @@ fetchProductsByCategory(category._id);
 
           </div>
         </div>
-      ))}
+      )) : <CatSkeleton/> }
+   
     </div>
   );
 };

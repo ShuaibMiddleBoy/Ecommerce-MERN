@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../store/cartSlice";
 
+
 const Product = ({ product }) => {
+
+
+
   const splitProductTitle =
     product.productTitle.length > 20
       ? product.productTitle.slice(0, 20) + "..."
@@ -20,14 +24,19 @@ const Product = ({ product }) => {
       })
     );
   };
+
+
+
+
+
   return (
-    <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md p-[5px]">
+    <div className="relative flex w-full h-[400px] max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md p-[5px]">
       <Link
         className="relative mx-3 mt-3 h-[260px] w-[260px] overflow-hidden rounded-xl"
         to={`/product/${product._id}`}
       >
         <img
-          className="object-cover"
+          className="object-cover" 
           src={`http://localhost:8000/${product.productImage}`}
           alt="product image"
         />

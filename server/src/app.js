@@ -12,6 +12,7 @@ import path, { dirname } from "path";
 import session from "express-session";
 import passport from "./config/passport.js";
 import categoryRoutes from "./routes/category.js"
+import userReviewroutes from "./routes/userReview.js"
 
 mongoDB();
 const PORT = process.env.PORT;
@@ -27,9 +28,22 @@ app.use(
   })
 );
 
+const allowedOrigins = [
+    'http://localhost:5173',
+  'http://127.0.0.1:5173'
+]
+
+
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function(origin, callback) {
+      if(!origin || allowedOrigins.indexOf(origin) !== -1){
+        callback(null, true)
+      }else{
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 );
@@ -41,6 +55,7 @@ app.use("/api/products", product);
 app.use("/api/categories", categoryRoutes);
 app.use("/api", payment);
 app.use("/auth", GoogleAuth);
+app.use("/api", userReviewroutes)
 
 app.use(express.static(path.join(__dirname, "../images")));
 
